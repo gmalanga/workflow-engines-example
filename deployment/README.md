@@ -250,7 +250,7 @@ helm install charts/activiti-cloud-full-example \
 helm list --all-namespaces
 ```
 
-#### 1.4.1 - Connect to Activiti
+#### 1.6.2 - Connect to Activiti
 
 Get the application URLs:
 
@@ -262,7 +262,7 @@ Notifications GraphiQL   : http://gateway-activiti.192.168.1.15.nip.io/notificat
 ```
 
 
-#### 1.4.2 - Remove Activiti
+#### 1.6.3 - Remove Activiti
 
 ```bash
 # remove flowable
