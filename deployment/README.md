@@ -4,7 +4,7 @@
 
 This requires:
 
-- `minikube` installed and configured on yur machine
+- `minikube` installed and configured on yur machine (use the Docker Desktop installation)
 - `helm v.3` installed and configured on your machine
 - `kubeclt` installed and configured on your machine
 
