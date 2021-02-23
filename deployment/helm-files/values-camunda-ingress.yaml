@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    meta.helm.sh/release-name: camunda
+    meta.helm.sh/release-namespace: camunda-bpm-platform
+    nginx.ingress.kubernetes.io/cors-allow-headers: Authorization, Content-Type, Accept
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+  labels:
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: camunda-bpm-platform
+    helm.sh/chart: camunda-bpm-platform-0.1.0
+  name: camunda-camunda-bpm-platform
+  namespace: camunda-bpm-platform
+spec:
+  rules:
+  - host: kubernetes.docker.internal
+    http:
+      paths:
+      - backend:
+          serviceName: camunda-camunda-bpm-platform
+          servicePort: 8080
+        path: /camunda
+        pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+    - hostname: localhost

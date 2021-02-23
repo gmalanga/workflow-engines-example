@@ -1,0 +1,12 @@
+postgres:
+    enabled: true
+    storage:
+        storageClassName: hostpath
+ingress:
+    enabled: false
+ui:
+    enabled: true
+    replicas: 1
+rest:
+    enabled: false
+    replicas: 1

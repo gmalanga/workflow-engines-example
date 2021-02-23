@@ -1,0 +1,27 @@
+global:
+  gateway:
+    domain: 192.168.1.15.nip.io
+activiti-cloud-identity:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+activiti-cloud-modeling:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+activiti-modeling-app:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+runtime-bundle:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+activiti-cloud-query:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+activiti-cloud-connector:
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
