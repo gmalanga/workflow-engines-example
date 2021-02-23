@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    meta.helm.sh/release-name: flowable
+    meta.helm.sh/release-namespace: flowable
+    nginx.ingress.kubernetes.io/cors-allow-headers: Authorization, Content-Type, Accept
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+  labels:
+    app.kubernetes.io/instance: flowable
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: flowable-ui
+    helm.sh/chart: flowable-6.6.0
+  name: flowable-ui
+  namespace: flowable
+spec:
+  rules:
+  - host: kubernetes.docker.internal
+    http:
+      paths:
+      - backend:
+          serviceName: flowable-ui
+          servicePort: 8080
+        path: /flowable-ui
+        pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+    - hostname: localhost
