@@ -1,112 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_14ojajy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:collaboration id="Collaboration_12k80jw">
+    <bpmn:participant id="Participant_0my9yxx" name="Vacation request" processRef="RequestVacation" />
+  </bpmn:collaboration>
   <bpmn:process id="RequestVacation" name="Request Vacation" isExecutable="true">
-    <bpmn:startEvent id="StartEvent_1" name="vacation request started">
-      <bpmn:outgoing>Flow_1ec9dg7</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1ec9dg7" sourceRef="StartEvent_1" targetRef="UserTask_requestVacation" />
-    <bpmn:userTask id="UserTask_requestVacation" name="Vacation request">
+    <bpmn:laneSet id="LaneSet_0fkowlu">
+      <bpmn:lane id="Lane_1gj36vh" name="Direct Report">
+        <bpmn:flowNodeRef>UserTask_requestVacation</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>UserTask_vacationSummary</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0udlbuq</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_1ek7sfg" name="Line Manager">
+        <bpmn:flowNodeRef>UserTask_reviewRequest</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1etjgji</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:userTask id="UserTask_requestVacation" name="Vacation request" camunda:assignee="${starter}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="from" label="From" type="date" />
           <camunda:formField id="to" label="To" type="date" />
+          <camunda:formField id="notes" label="Notes" type="string" />
+          <camunda:formField id="comments" label="Manager&#39;s comments" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ec9dg7</bpmn:incoming>
       <bpmn:incoming>Flow_05la05f</bpmn:incoming>
       <bpmn:outgoing>Flow_1ansc5j</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1ansc5j" sourceRef="UserTask_requestVacation" targetRef="UserTask_reviewRequest" />
-    <bpmn:exclusiveGateway id="Gateway_1etjgji" name="Approved?">
-      <bpmn:incoming>Flow_1cxbesy</bpmn:incoming>
-      <bpmn:outgoing>Flow_0n7sfk3</bpmn:outgoing>
-      <bpmn:outgoing>Flow_05la05f</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1cxbesy" sourceRef="UserTask_reviewRequest" targetRef="Gateway_1etjgji" />
-    <bpmn:sequenceFlow id="Flow_0n7sfk3" name="Yes" sourceRef="Gateway_1etjgji" targetRef="UserTask_vacationSummary">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == true}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:endEvent id="Event_0udlbuq" name="vacation request ended">
-      <bpmn:incoming>Flow_1ckuoh3</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1ckuoh3" sourceRef="UserTask_vacationSummary" targetRef="Event_0udlbuq" />
+    <bpmn:startEvent id="StartEvent_1" name="vacation request started" camunda:initiator="starter">
+      <bpmn:outgoing>Flow_1ec9dg7</bpmn:outgoing>
+    </bpmn:startEvent>
     <bpmn:userTask id="UserTask_reviewRequest" name="Review request" camunda:candidateGroups="management">
       <bpmn:extensionElements>
         <camunda:formData>
+          <camunda:formField id="from" label="From" type="date" />
+          <camunda:formField id="to" label="To" type="date" />
+          <camunda:formField id="notes" label="Notes" type="string" />
           <camunda:formField id="approved" label="Approved?" type="boolean" />
+          <camunda:formField id="comments" label="Manager&#39;s comments" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ansc5j</bpmn:incoming>
       <bpmn:outgoing>Flow_1cxbesy</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_05la05f" name="No" sourceRef="Gateway_1etjgji" targetRef="UserTask_requestVacation">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:userTask id="UserTask_vacationSummary" name="Vacation summary">
+    <bpmn:userTask id="UserTask_vacationSummary" name="Vacation summary" camunda:assignee="${starter}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="from" label="From" type="date" />
+          <camunda:formField id="to" label="To" type="date" />
+          <camunda:formField id="notes" label="Notes" type="string" />
+          <camunda:formField id="approved" label="Approved" type="boolean" />
+          <camunda:formField id="comments" label="Manager&#39;s comments" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0n7sfk3</bpmn:incoming>
       <bpmn:outgoing>Flow_1ckuoh3</bpmn:outgoing>
     </bpmn:userTask>
+    <bpmn:endEvent id="Event_0udlbuq" name="vacation request ended">
+      <bpmn:incoming>Flow_1ckuoh3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_1etjgji" name="Approved?">
+      <bpmn:incoming>Flow_1cxbesy</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n7sfk3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_05la05f</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_05la05f" name="No" sourceRef="Gateway_1etjgji" targetRef="UserTask_requestVacation">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ckuoh3" sourceRef="UserTask_vacationSummary" targetRef="Event_0udlbuq" />
+    <bpmn:sequenceFlow id="Flow_0n7sfk3" name="Yes" sourceRef="Gateway_1etjgji" targetRef="UserTask_vacationSummary">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1cxbesy" sourceRef="UserTask_reviewRequest" targetRef="Gateway_1etjgji" />
+    <bpmn:sequenceFlow id="Flow_1ansc5j" sourceRef="UserTask_requestVacation" targetRef="UserTask_reviewRequest" />
+    <bpmn:sequenceFlow id="Flow_1ec9dg7" sourceRef="StartEvent_1" targetRef="UserTask_requestVacation" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="RequestVacation">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_12k80jw">
+      <bpmndi:BPMNShape id="Participant_0my9yxx_di" bpmnElement="Participant_0my9yxx" isHorizontal="true">
+        <dc:Bounds x="129" y="83" width="1151" height="563" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1ek7sfg_di" bpmnElement="Lane_1ek7sfg" isHorizontal="true">
+        <dc:Bounds x="159" y="380" width="1121" height="266" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1gj36vh_di" bpmnElement="Lane_1gj36vh" isHorizontal="true">
+        <dc:Bounds x="159" y="83" width="1121" height="297" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1ec9dg7_di" bpmnElement="Flow_1ec9dg7">
-        <di:waypoint x="215" y="177" />
-        <di:waypoint x="300" y="177" />
+        <di:waypoint x="318" y="240" />
+        <di:waypoint x="410" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ansc5j_di" bpmnElement="Flow_1ansc5j">
-        <di:waypoint x="400" y="177" />
-        <di:waypoint x="490" y="177" />
+        <di:waypoint x="460" y="280" />
+        <di:waypoint x="460" y="520" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1cxbesy_di" bpmnElement="Flow_1cxbesy">
-        <di:waypoint x="590" y="177" />
-        <di:waypoint x="685" y="177" />
+        <di:waypoint x="510" y="560" />
+        <di:waypoint x="635" y="560" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0n7sfk3_di" bpmnElement="Flow_0n7sfk3">
-        <di:waypoint x="735" y="177" />
-        <di:waypoint x="830" y="177" />
+        <di:waypoint x="685" y="560" />
+        <di:waypoint x="810" y="560" />
+        <di:waypoint x="810" y="240" />
+        <di:waypoint x="880" y="240" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="774" y="159" width="18" height="14" />
+          <dc:Bounds x="696" y="543" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ckuoh3_di" bpmnElement="Flow_1ckuoh3">
-        <di:waypoint x="930" y="177" />
-        <di:waypoint x="1032" y="177" />
+        <di:waypoint x="980" y="240" />
+        <di:waypoint x="1082" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05la05f_di" bpmnElement="Flow_05la05f">
-        <di:waypoint x="710" y="202" />
-        <di:waypoint x="710" y="310" />
-        <di:waypoint x="350" y="310" />
-        <di:waypoint x="350" y="217" />
+        <di:waypoint x="660" y="535" />
+        <di:waypoint x="660" y="240" />
+        <di:waypoint x="510" y="240" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="523" y="292" width="15" height="14" />
+          <dc:Bounds x="672" y="483" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="159" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="157" y="202" width="81" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1sp1f4n_di" bpmnElement="UserTask_requestVacation">
-        <dc:Bounds x="300" y="137" width="100" height="80" />
+        <dc:Bounds x="410" y="200" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1etjgji_di" bpmnElement="Gateway_1etjgji" isMarkerVisible="true">
-        <dc:Bounds x="685" y="152" width="50" height="50" />
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="282" y="222" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="683" y="122" width="54" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0udlbuq_di" bpmnElement="Event_0udlbuq">
-        <dc:Bounds x="1032" y="159" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1010" y="202" width="81" height="27" />
+          <dc:Bounds x="260" y="265" width="81" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0csn3ql_di" bpmnElement="UserTask_reviewRequest">
-        <dc:Bounds x="490" y="137" width="100" height="80" />
+        <dc:Bounds x="410" y="520" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0vq295e_di" bpmnElement="UserTask_vacationSummary">
-        <dc:Bounds x="830" y="137" width="100" height="80" />
+        <dc:Bounds x="880" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0udlbuq_di" bpmnElement="Event_0udlbuq">
+        <dc:Bounds x="1082" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1060" y="265" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1etjgji_di" bpmnElement="Gateway_1etjgji" isMarkerVisible="true">
+        <dc:Bounds x="635" y="535" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="633" y="595" width="54" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
