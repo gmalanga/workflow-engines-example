@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/name: camunda-bpm-platform
     helm.sh/chart: camunda-bpm-platform-0.1.0
   name: camunda-camunda-bpm-platform
-  namespace: camunda-bpm-platform
+  namespace: camunda
 spec:
   rules:
   - host: kubernetes.docker.internal
