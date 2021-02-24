@@ -1,0 +1,7 @@
+.classpath
+camunda/spring-boot-app/target
+camunda/external-service-client/.settings
+.project
+camunda/external-service-client/target
+camunda-db.mv.db
+camunda/spring-boot-app/.settings

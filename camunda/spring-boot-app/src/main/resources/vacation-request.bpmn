@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_14ojajy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:process id="RequestVacation" name="Request Vacation" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="vacation request started">
+      <bpmn:outgoing>Flow_1ec9dg7</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1ec9dg7" sourceRef="StartEvent_1" targetRef="UserTask_requestVacation" />
+    <bpmn:userTask id="UserTask_requestVacation" name="Vacation request">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="from" label="From" type="date" />
+          <camunda:formField id="to" label="To" type="date" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ec9dg7</bpmn:incoming>
+      <bpmn:incoming>Flow_05la05f</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ansc5j</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1ansc5j" sourceRef="UserTask_requestVacation" targetRef="UserTask_reviewRequest" />
+    <bpmn:exclusiveGateway id="Gateway_1etjgji" name="Approved?">
+      <bpmn:incoming>Flow_1cxbesy</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n7sfk3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_05la05f</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1cxbesy" sourceRef="UserTask_reviewRequest" targetRef="Gateway_1etjgji" />
+    <bpmn:sequenceFlow id="Flow_0n7sfk3" name="Yes" sourceRef="Gateway_1etjgji" targetRef="UserTask_vacationSummary">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0udlbuq" name="vacation request ended">
+      <bpmn:incoming>Flow_1ckuoh3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1ckuoh3" sourceRef="UserTask_vacationSummary" targetRef="Event_0udlbuq" />
+    <bpmn:userTask id="UserTask_reviewRequest" name="Review request" camunda:candidateGroups="management">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="approved" label="Approved?" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ansc5j</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cxbesy</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_05la05f" name="No" sourceRef="Gateway_1etjgji" targetRef="UserTask_requestVacation">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="UserTask_vacationSummary" name="Vacation summary">
+      <bpmn:incoming>Flow_0n7sfk3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ckuoh3</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="RequestVacation">
+      <bpmndi:BPMNEdge id="Flow_1ec9dg7_di" bpmnElement="Flow_1ec9dg7">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="300" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ansc5j_di" bpmnElement="Flow_1ansc5j">
+        <di:waypoint x="400" y="177" />
+        <di:waypoint x="490" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cxbesy_di" bpmnElement="Flow_1cxbesy">
+        <di:waypoint x="590" y="177" />
+        <di:waypoint x="685" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0n7sfk3_di" bpmnElement="Flow_0n7sfk3">
+        <di:waypoint x="735" y="177" />
+        <di:waypoint x="830" y="177" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="774" y="159" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ckuoh3_di" bpmnElement="Flow_1ckuoh3">
+        <di:waypoint x="930" y="177" />
+        <di:waypoint x="1032" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05la05f_di" bpmnElement="Flow_05la05f">
+        <di:waypoint x="710" y="202" />
+        <di:waypoint x="710" y="310" />
+        <di:waypoint x="350" y="310" />
+        <di:waypoint x="350" y="217" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="523" y="292" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="157" y="202" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1sp1f4n_di" bpmnElement="UserTask_requestVacation">
+        <dc:Bounds x="300" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1etjgji_di" bpmnElement="Gateway_1etjgji" isMarkerVisible="true">
+        <dc:Bounds x="685" y="152" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="683" y="122" width="54" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0udlbuq_di" bpmnElement="Event_0udlbuq">
+        <dc:Bounds x="1032" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1010" y="202" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0csn3ql_di" bpmnElement="UserTask_reviewRequest">
+        <dc:Bounds x="490" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vq295e_di" bpmnElement="UserTask_vacationSummary">
+        <dc:Bounds x="830" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1083lwk" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:process id="TweetQA-process2" name="TweetQA-process2" isExecutable="true">
+    <bpmn:startEvent id="tweet_proposed_start_event" name="Tweet Proposed" camunda:formKey="embedded:app:forms/start.html">
+      <bpmn:outgoing>SequenceFlow_1lv24wp</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1lv24wp" sourceRef="tweet_proposed_start_event" targetRef="UserTask_ReviewTweet" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0e4s25p" name="Approved?">
+      <bpmn:incoming>SequenceFlow_17s0pnk</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0rwxf9n</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0ypdv4n</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_17s0pnk" sourceRef="UserTask_ReviewTweet" targetRef="ExclusiveGateway_0e4s25p" />
+    <bpmn:sequenceFlow id="SequenceFlow_0rwxf9n" name="No" sourceRef="ExclusiveGateway_0e4s25p" targetRef="ServiceTask_sendNotification">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0ypdv4n" name="Yes" sourceRef="ExclusiveGateway_0e4s25p" targetRef="Task_187ictz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1r0u9np" sourceRef="ServiceTask_sendNotification" targetRef="Task_03y6bia" />
+    <bpmn:sequenceFlow id="SequenceFlow_0sch9jq" sourceRef="Task_03y6bia" targetRef="ExclusiveGateway_08p88zp" />
+    <bpmn:endEvent id="EndEvent_0glt1gz" name="Tweet Cancelled">
+      <bpmn:incoming>SequenceFlow_0nwaok2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_09vci91" name="Tweet Posted">
+      <bpmn:incoming>SequenceFlow_1x372cb</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1x372cb" sourceRef="Task_187ictz" targetRef="EndEvent_09vci91" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_08p88zp" name="Repost?">
+      <bpmn:incoming>SequenceFlow_0sch9jq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0jt3rhl</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0nwaok2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0jt3rhl" name="Yes" sourceRef="ExclusiveGateway_08p88zp" targetRef="UserTask_ReviewTweet">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${repost == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0nwaok2" name="No" sourceRef="ExclusiveGateway_08p88zp" targetRef="EndEvent_0glt1gz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${repost == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:manualTask id="Task_03y6bia" name="Modify Tweet">
+      <bpmn:incoming>SequenceFlow_1r0u9np</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0sch9jq</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:serviceTask id="Task_187ictz" name="Post Tweet" camunda:class="com.camunda.training.CreateTweetDelegate">
+      <bpmn:incoming>SequenceFlow_0ypdv4n</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1x372cb</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="UserTask_ReviewTweet" name="Review Tweet" camunda:formKey="embedded:app:forms/review_tweet.html" camunda:candidateGroups="management">
+      <bpmn:incoming>SequenceFlow_1lv24wp</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0jt3rhl</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_17s0pnk</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="ServiceTask_sendNotification" name="Send Notification" camunda:type="external" camunda:topic="notification">
+      <bpmn:incoming>SequenceFlow_0rwxf9n</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1r0u9np</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TweetQA-process2">
+      <bpmndi:BPMNEdge id="SequenceFlow_0nwaok2_di" bpmnElement="SequenceFlow_0nwaok2">
+        <di:waypoint x="360" y="305" />
+        <di:waypoint x="360" y="392" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="368" y="345" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0jt3rhl_di" bpmnElement="SequenceFlow_0jt3rhl">
+        <di:waypoint x="360" y="255" />
+        <di:waypoint x="360" y="167" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="366" y="206" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1x372cb_di" bpmnElement="SequenceFlow_1x372cb">
+        <di:waypoint x="930" y="127" />
+        <di:waypoint x="1022" y="127" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0sch9jq_di" bpmnElement="SequenceFlow_0sch9jq">
+        <di:waypoint x="470" y="280" />
+        <di:waypoint x="385" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1r0u9np_di" bpmnElement="SequenceFlow_1r0u9np">
+        <di:waypoint x="640" y="280" />
+        <di:waypoint x="570" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ypdv4n_di" bpmnElement="SequenceFlow_0ypdv4n">
+        <di:waypoint x="715" y="127" />
+        <di:waypoint x="830" y="127" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="764" y="109" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0rwxf9n_di" bpmnElement="SequenceFlow_0rwxf9n">
+        <di:waypoint x="690" y="152" />
+        <di:waypoint x="690" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="702" y="182" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_17s0pnk_di" bpmnElement="SequenceFlow_17s0pnk">
+        <di:waypoint x="420" y="127" />
+        <di:waypoint x="665" y="127" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1lv24wp_di" bpmnElement="SequenceFlow_1lv24wp">
+        <di:waypoint x="215" y="127" />
+        <di:waypoint x="320" y="127" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="tweet_proposed_start_event">
+        <dc:Bounds x="179" y="109" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="158" y="152" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0e4s25p_di" bpmnElement="ExclusiveGateway_0e4s25p" isMarkerVisible="true">
+        <dc:Bounds x="665" y="102" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="663" y="83" width="54" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0glt1gz_di" bpmnElement="EndEvent_0glt1gz">
+        <dc:Bounds x="342" y="392" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="320" y="435" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_09vci91_di" bpmnElement="EndEvent_09vci91">
+        <dc:Bounds x="1022" y="109" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1008" y="152" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_08p88zp_di" bpmnElement="ExclusiveGateway_08p88zp" isMarkerVisible="true">
+        <dc:Bounds x="335" y="255" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="284" y="273" width="41" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0a2rywv_di" bpmnElement="Task_03y6bia">
+        <dc:Bounds x="470" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ar2qu4_di" bpmnElement="Task_187ictz">
+        <dc:Bounds x="830" y="87" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10eegtn_di" bpmnElement="UserTask_ReviewTweet">
+        <dc:Bounds x="320" y="87" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ma6mcq_di" bpmnElement="ServiceTask_sendNotification">
+        <dc:Bounds x="640" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
