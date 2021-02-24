@@ -1,0 +1,36 @@
+<form class="form-horizontal">
+  <div class="form-group">
+  	<label class="control-label col-md-4">Tweet  Content</label>
+    <div class="col-md-8">
+      <input type="text"
+             cam-variable-name="tweet_content"
+             cam-variable-type="String"
+             readonly="true"
+             class="form-control" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-md-4">Approve</label>
+    <input type="checkbox"
+       cam-variable-name="approved"
+       cam-variable-type="Boolean" />
+   	<!-- ><select cam-variable-name="approved"
+        	cam-variable-type="Boolean">
+  		<option value="true">Yes</option>
+  		<option value="false">No</option>
+	</select> -->
+  </div>
+  <div class="form-group">
+    <label class="control-label col-md-4">Comment</label>
+    <div class="col-md-8">
+      <input type="text"
+             cam-variable-name="comment"
+             cam-variable-type="String"
+             class="form-control" />
+    </div>
+  </div>
+
+  <script cam-script type="text/form-script">
+    // custom JavaScript goes here
+  </script>
+</form>
