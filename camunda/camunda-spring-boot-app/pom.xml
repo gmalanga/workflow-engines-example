@@ -144,7 +144,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.6.0</version>
         <configuration>
-          <mainClass>com.camunda.training.CamundaApplication</mainClass>
+          <mainClass>com.zaizi.CamundaApplication</mainClass>
         </configuration>
       </plugin>
     </plugins>
