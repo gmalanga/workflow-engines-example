@@ -5,3 +5,7 @@ camunda/external-service-client/.settings
 camunda/external-service-client/target
 camunda-db.mv.db
 camunda/spring-boot-app/.settings
+camunda/camunda-external-service-client/.settings
+camunda/camunda-external-service-client/target
+camunda/camunda-spring-boot-app/.settings
+camunda/camunda-spring-boot-app/target
