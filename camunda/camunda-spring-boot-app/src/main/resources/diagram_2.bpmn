@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_18by7mp" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:collaboration id="Collaboration_0lwto8f">
+    <bpmn:participant id="Participant_1y72vgn" name="24/7 for HR Admins" processRef="Process_247_hr_admins" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_247_hr_admins" name="24by7 for HR admins" isExecutable="true" camunda:versionTag="4">
+    <bpmn:startEvent id="StartEvent_1" camunda:initiator="admin_starter">
+      <bpmn:outgoing>Flow_11k4cke</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_11k4cke" sourceRef="StartEvent_1" targetRef="Activity_0a5i9bk" />
+    <bpmn:callActivity id="Activity_0a5i9bk" name="MySubProcess" calledElement="MySubProcess">
+      <bpmn:extensionElements>
+        <camunda:in source="admin_starter" target="admin_starter" />
+        <camunda:out source="MySubVariable" target="MyVariable" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_11k4cke</bpmn:incoming>
+      <bpmn:outgoing>Flow_1c7w9s0</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_1c7w9s0" sourceRef="Activity_0a5i9bk" targetRef="Activity_0jvmzgb" />
+    <bpmn:scriptTask id="Activity_0jvmzgb" name="Test" scriptFormat="groovy">
+      <bpmn:incoming>Flow_1c7w9s0</bpmn:incoming>
+      <bpmn:outgoing>Flow_14k7y96</bpmn:outgoing>
+      <bpmn:script>println "$MyVariable"</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:endEvent id="Event_0c5aj37">
+      <bpmn:incoming>Flow_14k7y96</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_14k7y96" sourceRef="Activity_0jvmzgb" targetRef="Event_0c5aj37" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0lwto8f">
+      <bpmndi:BPMNShape id="Participant_1y72vgn_di" bpmnElement="Participant_1y72vgn" isHorizontal="true">
+        <dc:Bounds x="160" y="79" width="900" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_11k4cke_di" bpmnElement="Flow_11k4cke">
+        <di:waypoint x="278" y="220" />
+        <di:waypoint x="430" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1c7w9s0_di" bpmnElement="Flow_1c7w9s0">
+        <di:waypoint x="530" y="220" />
+        <di:waypoint x="690" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14k7y96_di" bpmnElement="Flow_14k7y96">
+        <di:waypoint x="790" y="220" />
+        <di:waypoint x="952" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="242" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1034wpn_di" bpmnElement="Activity_0a5i9bk">
+        <dc:Bounds x="430" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_061z9lo_di" bpmnElement="Activity_0jvmzgb">
+        <dc:Bounds x="690" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0c5aj37_di" bpmnElement="Event_0c5aj37">
+        <dc:Bounds x="952" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
