@@ -81,7 +81,12 @@ public class DemoTest {
 			if (wfs.toString().contains("AssertTask")) {
 				AssertTask as = (AssertTask) wfs;
 				taskName = as.task;
-				assertThat(processInstance).isWaitingAt(taskName);
+				if(taskName.equals("End"))
+				{
+					assertThat(processInstance).isEnded();
+				} else {
+					assertThat(processInstance).isWaitingAt(taskName);
+				}
 			}
 			// ASSERT VARIABLE
 			if (wfs.toString().contains("AssertVariable")) {
@@ -96,7 +101,7 @@ public class DemoTest {
 			}
 			// FORM SUBMIT
 			if (wfs.toString().contains("FormSubmit")) {
-				// TODO Include the candidate group in the spreadsheet
+				// TODO Include the candidate groups in the spreadsheet, or the owner of the task
 				if(taskName.equals("Review1")) {
 					candidateGroup = "Reviewers1";
 				}
@@ -130,6 +135,5 @@ public class DemoTest {
 		Task task = taskList.get(0);
 
 		taskService().complete(task.getId(), approvedMap);
-
 	}
 }
