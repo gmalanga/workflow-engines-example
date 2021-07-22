@@ -1,0 +1,134 @@
+<form class="form-horizontal" role="form" >
+  
+  <script cam-script type="text/form-script">
+  camForm.on('form-loaded', function() {
+    $scope.IsVisible = false;
+	// tell the form SDK to fetch the variable named 'RecheckDate'
+    // camForm.variableManager.fetchVariable('RecheckDate');
+  });
+  camForm.on('variables-fetched', function() {
+    // work with the variable (bind it to the current AngularJS $scope)
+    // $scope.RecheckDate = camForm.variableManager.variableValue('RecheckDate');
+  });
+  camForm.on('submit', function() {
+    // make the variableManager forget about the invoiceData variable
+	if($scope.IsVisible == false) {
+    	camForm.variableManager.destroyVariable('RecheckDate');
+	}
+  });
+  </script>
+  
+  <div class="form-group">
+    <label class="control-label col-md-4">RTW Share Code</label>
+    <div class="col-md-8">
+    
+      <input type="text"
+             cam-variable-name="RTWShareCode"
+             cam-variable-type="String"
+             readonly
+             class="form-control" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-md-4">Document Reference</label>
+    <div class="col-md-8">
+    
+      <input type="text"
+             cam-variable-name="DocumentReference"
+             cam-variable-type="String"
+             class="form-control" />
+    </div>
+  </div>
+  <div class="form-group">
+  	 <label class="control-label col-md-4">Date Of Check</label>
+     <div class="col-md-8">
+	    <p class="input-group">
+	
+		  <input type="text"
+		       cam-variable-name="DateOfCheck"
+		       cam-variable-type="Date"
+		       class="form-control"
+		       uib-datepicker-popup="yyyy-MM-dd'T'HH:mm:ss"
+		       is-open="dateField1Opened" />
+		
+		  <span class="input-group-btn">
+		    <button type="button"
+		            class="btn btn-default"
+		            ng-click="open1($event)">
+		      <i class="glyphicon glyphicon-calendar"></i>
+		    </button>
+		  </span>
+		</p>
+	 </div>
+  </div>
+  <script cam-script type="text/form-script">
+  $scope.open1 = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.dateField1Opened = true;
+  };
+  </script>
+  <div class="form-group">
+    <label class="control-label col-md-4">Document Copy Upload</label>
+    <div class="col-md-8">
+    
+    	<input type="file"
+	       cam-variable-name="DocumentCopyUpload"
+	       cam-variable-type="File"
+	       cam-max-filesize="10000000" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-md-4">Recheck Required?</label>
+    <div class="col-md-8">
+    
+    	<input type="checkbox"
+       		cam-variable-name="RecheckRequired"
+       		cam-variable-type="Boolean" 
+       		ng-click="open2($event)"/>
+    </div>
+  </div>
+  <script cam-script type="text/form-script">
+  $scope.open2 = function($event) {
+
+	if($scope.RecheckRequired) {
+    	alert("ticked");
+		$scope.IsVisible = false;
+	} else {
+		alert("unticked");
+		$scope.IsVisible = true;
+	}
+  };
+  </script>
+  <div class="form-group" ng-show="IsVisible">
+  	 <label class="control-label col-md-4">Recheck Date</label>
+     <div class="col-md-8">
+	    <p class="input-group">
+	
+		  <input type="text"
+		       cam-variable-name="RecheckDate"
+		       cam-variable-type="Date"
+		       class="form-control"
+		       uib-datepicker-popup="yyyy-MM-dd'T'HH:mm:ss"
+		       is-open="dateField2Opened" />
+		
+		  <span class="input-group-btn">
+		    <button type="button"
+		            class="btn btn-default"
+		            ng-click="open3($event)">
+		      <i class="glyphicon glyphicon-calendar"></i>
+		    </button>
+		  </span>
+		</p>
+	 </div>
+  </div>
+  <script cam-script type="text/form-script">
+  $scope.open3 = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.dateField2Opened = true;
+  };
+  </script>
+</form>

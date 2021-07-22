@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="Definitions_02nja0j" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:collaboration id="Collaboration_1pqbhbz">
+    <bpmn:participant id="Participant_07cicf1" name="Document Check" processRef="DocumentCheck" />
+  </bpmn:collaboration>
+  <bpmn:process id="DocumentCheck" name="Document Check" isExecutable="true" camunda:versionTag="9">
+    <bpmn:laneSet id="LaneSet_0s4xrgs">
+      <bpmn:lane id="Lane_12ojjay" name="Site manager">
+        <bpmn:flowNodeRef>Activity_0ymhfzn</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_17zqyb0</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1psh5rw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_108f78g</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1k10z68</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_166ccuq</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_12o4j53" name="Candidate">
+        <bpmn:flowNodeRef>Gateway_10e602f</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1xxcc6o</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>IdDocumentType</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1hh1glj</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:exclusiveGateway id="Gateway_10e602f" name="Online verification provided?">
+      <bpmn:incoming>Flow_0bk8aof</bpmn:incoming>
+      <bpmn:outgoing>Flow_0iiutkx</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1jfqbbw</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Activity_1xxcc6o" name="Provide Share code" camunda:assignee="${starter}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="RTWShareCode" label="RTW Share Code" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1bkm0mn</bpmn:incoming>
+      <bpmn:incoming>Flow_1jfqbbw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oqkq20</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="IdDocumentType" name="Confirm the type of &#34;Right to work&#34; document being submitted" camunda:assignee="${starter}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="IdType" label="Select ID type" type="enum">
+            <camunda:value id="Value_28iep26" name="United Kingdom" />
+            <camunda:value id="Value_33u3f6q" name="Republic of Ireland" />
+            <camunda:value id="Value_3aceqjo" name="EEA / EU / Swiss" />
+            <camunda:value id="Value_25fbm0s" name="Non EEA / EU / Swiss" />
+          </camunda:formField>
+          <camunda:formField id="onlineVerification" label="Online Verification" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1op5tt7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0efi8k3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1hh1glj" name="ID type?">
+      <bpmn:incoming>Flow_0efi8k3</bpmn:incoming>
+      <bpmn:outgoing>Flow_02b0vv7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0bk8aof</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1bkm0mn</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Activity_0ymhfzn" name="Declaration" camunda:assignee="${siteManager}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="ConfirmDocumentsChecked" label="Confirm Documents Checked?" type="boolean" />
+          <camunda:formField id="CheckedBy" label="Checked By" type="string" />
+          <camunda:formField id="CheckedOn" label="Checked on" type="date" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0t9n7dl</bpmn:incoming>
+      <bpmn:incoming>Flow_1qjs8hh</bpmn:incoming>
+      <bpmn:incoming>Flow_0wo9tcb</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i6gpgs</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="StartEvent_1" camunda:initiator="starter">
+      <bpmn:outgoing>Flow_1op5tt7</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Activity_17zqyb0" name="BRP / Visa Check" camunda:candidateGroups="SiteManagers">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="DocumentType" label="Document Type" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+            <camunda:value id="Value_3kgptv3" name="PassportWithVisa" />
+            <camunda:value id="Value_3910soq" name="BiometricResidencePermit" />
+          </camunda:formField>
+          <camunda:formField id="DocumentReference" label="Document Reference" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="PassportExpiryDate" label="Passport Expiry Date" type="date">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:taskListener event="complete">
+          <camunda:script scriptFormat="groovy">task.execution.setVariable('siteManager', task.assignee);</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0iiutkx</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qjs8hh</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_1psh5rw" name="Online RTW Check" camunda:formKey="embedded:app:forms/form-Online-RTW-Check.html" camunda:candidateGroups="SiteManagers">
+      <bpmn:extensionElements>
+        <camunda:taskListener event="complete">
+          <camunda:script scriptFormat="groovy">task.execution.setVariable('siteManager', task.assignee);</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0oqkq20</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t9n7dl</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_108f78g" name="Physical Document check" camunda:candidateGroups="SiteManagers">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="DocumentType" label="Document Type" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+            <camunda:value id="Value_3s18dco" name="UK Passport" />
+            <camunda:value id="Value_3nk60jp" name="Irish passport" />
+            <camunda:value id="Value_2q5nnur" name="Birth Certificate Plus National Insurance Number" />
+          </camunda:formField>
+          <camunda:formField id="DocumentReference" label="Document Reference" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="NINumber" label="NI Number" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="DocumentExpiryDate" label="Document Expiry Date" type="date">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:taskListener event="complete">
+          <camunda:script scriptFormat="groovy">task.execution.setVariable('siteManager', task.assignee);</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02b0vv7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wo9tcb</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0wo9tcb" sourceRef="Activity_108f78g" targetRef="Activity_0ymhfzn" />
+    <bpmn:sequenceFlow id="Flow_1qjs8hh" sourceRef="Activity_17zqyb0" targetRef="Activity_0ymhfzn" />
+    <bpmn:sequenceFlow id="Flow_0t9n7dl" sourceRef="Activity_1psh5rw" targetRef="Activity_0ymhfzn" />
+    <bpmn:sequenceFlow id="Flow_1jfqbbw" name="Yes - Online Verification" sourceRef="Gateway_10e602f" targetRef="Activity_1xxcc6o">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${onlineVerification == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0iiutkx" name="No - Physical Document Check" sourceRef="Gateway_10e602f" targetRef="Activity_17zqyb0">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${onlineVerification == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0oqkq20" sourceRef="Activity_1xxcc6o" targetRef="Activity_1psh5rw" />
+    <bpmn:sequenceFlow id="Flow_0bk8aof" name="Other Non EU" sourceRef="Gateway_1hh1glj" targetRef="Gateway_10e602f">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${IdType == "Value_25fbm0s"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1bkm0mn" name="EU / EEA / Swiss" sourceRef="Gateway_1hh1glj" targetRef="Activity_1xxcc6o">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${IdType == "Value_3aceqjo"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_02b0vv7" name="UK / Irish" sourceRef="Gateway_1hh1glj" targetRef="Activity_108f78g">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${IdType == "Value_28iep26" or IdType == "Value_33u3f6q"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0efi8k3" sourceRef="IdDocumentType" targetRef="Gateway_1hh1glj" />
+    <bpmn:sequenceFlow id="Flow_1op5tt7" sourceRef="StartEvent_1" targetRef="IdDocumentType" />
+    <bpmn:sequenceFlow id="Flow_0n0uelj" sourceRef="Activity_1k10z68" targetRef="Event_166ccuq" />
+    <bpmn:sequenceFlow id="Flow_0i6gpgs" sourceRef="Activity_0ymhfzn" targetRef="Activity_1k10z68" />
+    <bpmn:serviceTask id="Activity_1k10z68" name="Store the info in the DB" camunda:class="com.zaizi.delegate.DummyDelegate">
+      <bpmn:incoming>Flow_0i6gpgs</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n0uelj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_166ccuq">
+      <bpmn:incoming>Flow_0n0uelj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:textAnnotation id="TextAnnotation_1eqy6uk">
+      <bpmn:text>A scan of the passport is required to be attached to this task</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0t4akha" sourceRef="Activity_17zqyb0" targetRef="TextAnnotation_1eqy6uk" />
+    <bpmn:textAnnotation id="TextAnnotation_0yptjc9">
+      <bpmn:text>CANNOT start work until dcument checks have been completed!</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0s9t4sr" sourceRef="Activity_0ymhfzn" targetRef="TextAnnotation_0yptjc9" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1pqbhbz">
+      <bpmndi:BPMNShape id="Participant_07cicf1_di" bpmnElement="Participant_07cicf1" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1150" height="1020" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_12o4j53_di" bpmnElement="Lane_12o4j53" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1120" height="480" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_12ojjay_di" bpmnElement="Lane_12ojjay" isHorizontal="true">
+        <dc:Bounds x="190" y="560" width="1120" height="540" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0i6gpgs_di" bpmnElement="Flow_0i6gpgs">
+        <di:waypoint x="865" y="830" />
+        <di:waypoint x="865" y="970" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0n0uelj_di" bpmnElement="Flow_0n0uelj">
+        <di:waypoint x="915" y="1010" />
+        <di:waypoint x="1052" y="1010" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1op5tt7_di" bpmnElement="Flow_1op5tt7">
+        <di:waypoint x="268" y="240" />
+        <di:waypoint x="355" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0efi8k3_di" bpmnElement="Flow_0efi8k3">
+        <di:waypoint x="455" y="240" />
+        <di:waypoint x="550" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02b0vv7_di" bpmnElement="Flow_02b0vv7" bioc:stroke="#000" bioc:fill="#fff">
+        <di:waypoint x="575" y="215" />
+        <di:waypoint x="575" y="160" />
+        <di:waypoint x="1080" y="160" />
+        <di:waypoint x="1080" y="610" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="622" y="142" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bkm0mn_di" bpmnElement="Flow_1bkm0mn" bioc:stroke="#000" bioc:fill="#fff">
+        <di:waypoint x="600" y="240" />
+        <di:waypoint x="865" y="240" />
+        <di:waypoint x="865" y="430" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="689" y="223" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bk8aof_di" bpmnElement="Flow_0bk8aof" bioc:stroke="#000" bioc:fill="#fff">
+        <di:waypoint x="575" y="265" />
+        <di:waypoint x="575" y="445" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="500" y="363" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oqkq20_di" bpmnElement="Flow_0oqkq20">
+        <di:waypoint x="865" y="510" />
+        <di:waypoint x="865" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0iiutkx_di" bpmnElement="Flow_0iiutkx" bioc:stroke="#000" bioc:fill="#fff">
+        <di:waypoint x="575" y="495" />
+        <di:waypoint x="575" y="610" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="577" y="517" width="86" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jfqbbw_di" bpmnElement="Flow_1jfqbbw" bioc:stroke="#000" bioc:fill="#fff">
+        <di:waypoint x="600" y="470" />
+        <di:waypoint x="815" y="470" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="608" y="430" width="84" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t9n7dl_di" bpmnElement="Flow_0t9n7dl">
+        <di:waypoint x="865" y="690" />
+        <di:waypoint x="865" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qjs8hh_di" bpmnElement="Flow_1qjs8hh">
+        <di:waypoint x="575" y="690" />
+        <di:waypoint x="575" y="790" />
+        <di:waypoint x="815" y="790" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wo9tcb_di" bpmnElement="Flow_0wo9tcb">
+        <di:waypoint x="1080" y="690" />
+        <di:waypoint x="1080" y="790" />
+        <di:waypoint x="915" y="790" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Gateway_10e602f_di" bpmnElement="Gateway_10e602f" isMarkerVisible="true" bioc:stroke="#000" bioc:fill="#fff">
+        <dc:Bounds x="550" y="445" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="483" y="450" width="53" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0labk15_di" bpmnElement="Activity_1xxcc6o">
+        <dc:Bounds x="815" y="430" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1sgk6vx_di" bpmnElement="IdDocumentType">
+        <dc:Bounds x="355" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1r9s36m_di" bpmnElement="Gateway_1hh1glj" isMarkerVisible="true" bioc:stroke="#000" bioc:fill="#fff">
+        <dc:Bounds x="550" y="215" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="528.5" y="203" width="41" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0k0m2po_di" bpmnElement="Activity_0ymhfzn">
+        <dc:Bounds x="815" y="750" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="232" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ylfr22_di" bpmnElement="Activity_17zqyb0">
+        <dc:Bounds x="525" y="610" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08r74qm_di" bpmnElement="Activity_1psh5rw">
+        <dc:Bounds x="815" y="610" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11sl9a2_di" bpmnElement="Activity_108f78g">
+        <dc:Bounds x="1030" y="610" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_129dcfh_di" bpmnElement="Activity_1k10z68">
+        <dc:Bounds x="815" y="970" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_166ccuq_di" bpmnElement="Event_166ccuq">
+        <dc:Bounds x="1052" y="992" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1eqy6uk_di" bpmnElement="TextAnnotation_1eqy6uk">
+        <dc:Bounds x="300" y="580" width="100" height="82" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0yptjc9_di" bpmnElement="TextAnnotation_0yptjc9">
+        <dc:Bounds x="1050" y="840" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0t4akha_di" bpmnElement="Association_0t4akha">
+        <di:waypoint x="525" y="638" />
+        <di:waypoint x="400" y="607" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0s9t4sr_di" bpmnElement="Association_0s9t4sr">
+        <di:waypoint x="915" y="812" />
+        <di:waypoint x="1050" y="871" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
