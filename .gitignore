@@ -10,3 +10,7 @@ camunda/camunda-external-service-client/target
 camunda/camunda-spring-boot-app/.settings
 camunda/camunda-spring-boot-app/target
 camunda-license.txt
+flowable/flowable-spring-boot-app/.settings
+flowable/flowable-spring-boot-app/target
+flowavble-db.mv.db
+flowavble-db.trace.db
