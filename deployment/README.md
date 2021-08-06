@@ -255,9 +255,16 @@ helm list --all-namespaces
 Get the application URLs:
 
 ```bash
-Activiti Identity        : http://identity-activiti.192.168.1.15.nip.io/auth `admin:admin`
-Activiti Modeler         : http://gateway-activiti.192.168.1.15.nip.io/modeling `modeler:password` 
-Notifications GraphiQL   : http://gateway-activiti.192.168.1.15.nip.io/notifications/graphiql
+Activiti Gateway         : http://gateway-activiti.192.168.1.20.nip.io
+Activiti Identity        : http://identity-activiti.192.168.1.20.nip.io/auth `admin:admin`
+Activiti Modeler         : http://gateway-activiti.192.168.1.20.nip.io/modeling `modeler:password` 
+Activiti Runtime Bundle  : http://gateway-activiti.192.168.1.20.nip.io/rb
+Activiti Cloud Connector : http://gateway-activiti.192.168.1.20.nip.io/example-cloud-connector
+Activiti Query           : http://gateway-activiti.192.168.1.20.nip.io/query
+Activiti Audit           : http://gateway-activiti.192.168.1.20.nip.io/audit
+Notifications GraphiQL   : http://gateway-activiti.192.168.1.20.nip.io/notifications/graphiql
+Notifications WebSockets : http://gateway-activiti.192.168.1.20.nip.io/notifications/ws/graphql
+Notifications Graphql    : http://gateway-activiti.192.168.1.20.nip.io/notifications/graphql
 
 ```
 
@@ -265,7 +272,7 @@ Notifications GraphiQL   : http://gateway-activiti.192.168.1.15.nip.io/notificat
 #### 1.6.3 - Remove Activiti
 
 ```bash
-# remove flowable
+# remove activiti
 helm delete activiti -n activiti
 
 # check
